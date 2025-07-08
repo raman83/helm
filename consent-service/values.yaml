@@ -1,0 +1,27 @@
+replicaCount: 1
+
+image:
+  repository: raman83/consent-service
+  tag: latest
+
+env:
+  profile: prod
+
+database:
+  host: host.docker.internal
+  port: 5432
+  name: consentdb
+
+
+
+service:
+  type: ClusterIP
+  port: 8096
+
+secrets:
+  db:
+    name: consent-db-secret
+    usernameKey: db-user
+    passwordKey: db-password
+    usernameValue: postgres
+    passwordValue: postgres

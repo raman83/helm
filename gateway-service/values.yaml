@@ -1,0 +1,45 @@
+image:
+  repository: raman83/auth-gateway-service
+  pullPolicy: IfNotPresent
+  tag: v1.0.0
+
+service:
+  type: ClusterIP
+  port: 8080
+
+autoscaling:
+  enabled: false
+
+serviceAccount:
+  create: false
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod
+  - name: SPRING_CONFIG_LOCATION
+    value: "file:/config/application-prod.yml"
+
+volumeMounts:
+  - name: config
+    mountPath: /config
+    readOnly: true
+
+volumes:
+  - name: config
+    configMap:
+      name: gateway-service-config
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: local.mybank.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: mybank-tls
+      hosts:
+        - local.mybank.com

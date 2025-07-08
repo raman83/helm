@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: raman83/auth-user
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8094
+
+
+database:
+  host: host.docker.internal
+  port: 5432
+  name: auth_user_db
+
+secrets:
+  db:
+    name: authuser-db-secret
+    usernameKey: db-user
+    passwordKey: db-password
+    usernameValue: postgres
+    passwordValue: postgres
+
+
+env:
+  profile: prod
+  
+istio:
+  enabled: true
+
+resources: {}
