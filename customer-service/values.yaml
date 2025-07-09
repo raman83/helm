@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: raman83/customer-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  profile: prod
+
+  kafka:
+    bootstrapServers: kafka.default.svc.cluster.local:9092
+
+  database:
+    host: host.docker.internal
+    port: 5432
+    name: customerdb
+
+  jwks:
+    uri: http://auth-service:8081/.well-known/jwks.json
+
+secrets:
+  db:
+    name: customer-db-secret
+    usernameKey: db-user
+    passwordKey: db-password
+    usernameValue: postgres
+    passwordValue: postgres
+
+service:
+  type: ClusterIP
+  port: 8083
+
+istio:
+  enabled: true
