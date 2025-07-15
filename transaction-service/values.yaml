@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: raman83/transaction-service
+  tag: latest
+  pullPolicy: Always
+
+ 
+env:
+  profile: prod
+
+  database:
+    host: host.docker.internal
+    port: 5432
+    name: transactiondb
+
+
+secrets:
+  db:
+    name: transaction-db-secret
+    usernameKey: db-user
+    passwordKey: db-password
+    usernameValue: postgres
+    passwordValue: postgres
+
+service:
+  type: ClusterIP
+  port: 8091
+
+istio:
+  enabled: false
+
+ 
+ 

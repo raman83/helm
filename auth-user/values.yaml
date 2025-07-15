@@ -3,6 +3,7 @@ replicaCount: 1
 image:
   repository: raman83/auth-user
   tag: latest
+  pullPolicy: Always
 
 env:
   profile: prod
@@ -11,20 +12,27 @@ database:
   host: host.docker.internal
   port: 5432
   name: auth_user_db
+  username: postgres
+  password: postgres
 
+consent:
+  url: http://consent-service:8096/api/v1
 
+auth0:
+  domain: https://dev-wgk04dj5v68sbhre.us.auth0.com
+  mgmtClientId: 7m9h4UQsjOeVom5ysSt0t3TFLRgibBkT
+  mgmtClientSecret: R4aR-TZspPcDf9davncKzgucuUPI2pLGnUPkhO90I4ZWEMQNMfmX2bmC4c0MUJy-
+  audience: https://dev-wgk04dj5v68sbhre.us.auth0.com/api/v2/
+  loginClientId: u78ytpMTj8rTv2ugyVebqydojAhYjbqe
+  loginClientSecret: cE0V135DmioRy2v8-XDa-4UqJn4xMqTwDZT8LGrxE3j65cBO_gvRee23DBxzlaEF
+  loginAudience: https://mockbank/api
 
 service:
   type: ClusterIP
   port: 8094
 
 istio:
-  enabled: true
+  enabled: false
 
 secrets:
-  db:
-    name: authuser-db-secret
-    usernameKey: db-user
-    passwordKey: db-password
-    usernameValue: postgres
-    passwordValue: postgres
+  name: authuser-secret

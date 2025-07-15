@@ -21,23 +21,56 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           ports:
-            - containerPort: 8094
+            - containerPort: {{ .Values.service.port }}
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "{{ .Values.env.profile }}"
+
             - name: DB_HOST
               value: "{{ .Values.database.host }}"
             - name: DB_PORT
               value: "{{ .Values.database.port }}"
             - name: DB_NAME
               value: "{{ .Values.database.name }}"
+            - name: CONSENT_SERVICE_URL
+              value: "{{ .Values.consent.url }}"
+
+            - name: AUTH0_DOMAIN
+              value: "{{ .Values.auth0.domain }}"
+            - name: AUTH0_AUDIENCE
+              value: "{{ .Values.auth0.audience }}"
+            - name: AUTH0_LOGIN_AUDIENCE
+              value: "{{ .Values.auth0.loginAudience }}"
+
+            # Inject from secret
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.secrets.db.name }}
-                  key: {{ .Values.secrets.db.usernameKey }}
+                  name: {{ .Values.secrets.name }}
+                  key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.secrets.db.name }}
-                  key: {{ .Values.secrets.db.passwordKey }}
+                  name: {{ .Values.secrets.name }}
+                  key: DB_PASSWORD
+
+            - name: AUTH0_MGMT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: AUTH0_MGMT_CLIENT_ID
+            - name: AUTH0_MGMT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: AUTH0_MGMT_CLIENT_SECRET
+            - name: AUTH0_LOGIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: AUTH0_LOGIN_CLIENT_ID
+            - name: AUTH0_LOGIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: AUTH0_LOGIN_CLIENT_SECRET
