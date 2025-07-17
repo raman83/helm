@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: raman83/payment-service
+  tag: latest
+  pullPolicy: Always
+
+env:
+  profile: prod
+
+database:
+  host: host.docker.internal
+  port: 5432
+  name: paymentdb
+  username: postgres
+  password: postgres
+
+kafka:
+  bootstrapServers: kafka.default.svc.cluster.local:9092
+
+service:
+  type: ClusterIP
+  port: 8088
+
+istio:
+  enabled: false
+
+secrets:
+  name: payment-secret

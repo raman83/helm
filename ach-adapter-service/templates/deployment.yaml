@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ach-adapter-service
+  labels:
+    app: ach-adapter-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: ach-adapter-service
+  template:
+    metadata:
+      labels:
+        app: ach-adapter-service
+      annotations:
+        sidecar.istio.io/inject: "{{ .Values.istio.enabled }}"
+    spec:
+      containers:
+        - name: ach-adapter-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "{{ .Values.env.profile }}"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
+
+          volumeMounts:
+            - name: batch-dir
+              mountPath: /app/batch
+
+      volumes:
+        - name: batch-dir
+          hostPath:
+            path: {{ .Values.batch.outputHostPath }}
+            type: DirectoryOrCreate

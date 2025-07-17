@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: raman83/ach-adapter-service
+  tag: latest
+  pullPolicy: Always
+
+env:
+  profile: prod
+
+kafka:
+  bootstrapServers: kafka.default.svc.cluster.local:9092
+
+service:
+  type: ClusterIP
+  port: 8086
+
+istio:
+  enabled: false
+
+
+batch:
+  outputHostPath: /tmp/k8-batch  # 🟢 This will exist on the Kubernetes node

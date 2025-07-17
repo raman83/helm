@@ -1,0 +1,31 @@
+fullnameOverride: kafka
+replicaCount: 1
+
+zookeeper:
+  enabled: true
+  replicaCount: 1
+
+auth:
+  client:
+    enabled: false
+  interBroker:
+    enabled: false
+
+listeners:
+  client:
+    protocol: PLAINTEXT
+
+externalAccess:
+  enabled: false
+
+service:
+  type: ClusterIP
+
+configurationOverrides:
+  "listeners": PLAINTEXT://:9092
+  "advertised.listeners": PLAINTEXT://kafka.default.svc.cluster.local:9092
+  "listener.security.protocol.map": PLAINTEXT:PLAINTEXT
+  "inter.broker.listener.name": PLAINTEXT
+
+persistence:
+  enabled: false

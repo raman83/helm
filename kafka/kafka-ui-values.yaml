@@ -1,0 +1,10 @@
+fullnameOverride: kafka-ui
+
+envs:
+  config:
+    KAFKA_CLUSTERS_0_NAME: local
+    KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka.default.svc.cluster.local:9092
+    KAFKA_CLUSTERS_0_ZOOKEEPER: kafka-zookeeper.default.svc.cluster.local:2181
+
+service:
+  type: ClusterIP
