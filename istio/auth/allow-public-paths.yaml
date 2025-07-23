@@ -1,0 +1,23 @@
+# allow-public-paths.yaml
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-public-paths
+  namespace: banking
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        paths:
+        - /api/v1/auth/login
+        - /api/v1/register
+        - /api/v1/customer/register
+        - /api/v1/customers
+        - /api/v1/auth/m2mToken
+        - /api/v1/auth/openBankToken
+        - /oauth/token
+        - /health

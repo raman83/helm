@@ -1,0 +1,17 @@
+# request-auth.yaml
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: auth0-jwt
+  namespace: banking
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway  # Attach to the ingress gateway
+  jwtRules:
+    - issuer: https://dev-wgk04dj5v68sbhre.us.auth0.com/
+      audiences:
+        - https://mockbank/api
+      jwksUri: https://dev-wgk04dj5v68sbhre.us.auth0.com/.well-known/jwks.json
+      forwardOriginalToken: true
+

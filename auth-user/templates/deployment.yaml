@@ -11,6 +11,8 @@ spec:
       app: auth-user
   template:
     metadata:
+      namespace: banking
+
       labels:
         app: auth-user
       annotations:

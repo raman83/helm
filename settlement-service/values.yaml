@@ -1,34 +1,37 @@
 replicaCount: 1
 
 image:
-  repository: raman83/transaction-service
+  repository: raman83/settlement-service
   tag: latest
   pullPolicy: Always
 
- 
 env:
   profile: prod
 
   database:
     host: host.docker.internal
     port: 5432
-    name: transactiondb
+    name: settlementdb
 
 
 secrets:
   db:
-    name: transaction-db-secret
+    name: settlement-db-secret
     usernameKey: db-user
     passwordKey: db-password
     usernameValue: postgres
     passwordValue: postgres
 
+kafka:
+  bootstrapServers: kafka.default.svc.cluster.local:9092
+
 service:
   type: ClusterIP
-  port: 8091
+  port: 8087
 
 istio:
-  enabled: true
+  enabled: false
 
- 
- 
+
+batch:
+  outputHostPath: /tmp/k8-batch  # 🟢 This will exist on the Kubernetes node

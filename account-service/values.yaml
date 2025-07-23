@@ -17,7 +17,7 @@ env:
 
 secrets:
   db:
-    name: accounts-db-secret
+    name: account-db-secret
     usernameKey: db-user
     passwordKey: db-password
     usernameValue: postgres
@@ -28,4 +28,4 @@ service:
   port: 8084
 
 istio:
-  enabled: false
+  enabled: true

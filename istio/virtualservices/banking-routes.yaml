@@ -1,0 +1,110 @@
+---
+# ---------------------------------------------------------------------------
+# ✅ VirtualService – Routing + Retry for All Microservices
+# ---------------------------------------------------------------------------
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: banking-routes
+  namespace: banking
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - banking-gw
+  http:
+  # ------------------ Auth-User ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/auth
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: auth-user.banking.svc.cluster.local
+
+  # ------------------ Account Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/accounts
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: account-service.banking.svc.cluster.local
+
+  # ------------------ Transaction Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/transactions
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: transaction-service.banking.svc.cluster.local
+
+  # ------------------ Customer Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/customers
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: customer-service.banking.svc.cluster.local
+
+  # ------------------ Consent Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/consent
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: consent-service.banking.svc.cluster.local
+
+  # ------------------ Payment Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/payments
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: payment-service.banking.svc.cluster.local
+
+  # ------------------ Settlement Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/settlement
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: settlement-service.banking.svc.cluster.local
+
+  # ------------------ ACH Adapter Service ------------------
+  - match:
+    - uri:
+        prefix: /api/v1/ach
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: gateway-error,connect-failure,refused-stream
+    route:
+    - destination:
+        host: ach-adapter-service.banking.svc.cluster.local

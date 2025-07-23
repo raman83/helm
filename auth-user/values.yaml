@@ -32,7 +32,11 @@ service:
   port: 8094
 
 istio:
-  enabled: false
+  enabled: true
+  gatewayPort: 80            # external port exposed by Istio ingress
+  hosts:                     # external hostnames allowed; use * if testing via IP
+    - "*"
+  path: "/authuser"    
 
 secrets:
   name: authuser-secret

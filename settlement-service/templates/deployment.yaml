@@ -1,38 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
-  namespace: banking 
-
+  name: settlement-service
   labels:
-    app: {{ .Chart.Name }}
-    release: {{ .Release.Name }}
+    app: settlement-service
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: settlement-service
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: settlement-service
       annotations:
         sidecar.istio.io/inject: "{{ .Values.istio.enabled }}"
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: settlement-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: {{ .Values.service.port }}
-
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.env.profile }}
-
-            - name: SERVER_PORT
-              value: "{{ .Values.service.port }}"
+              value: "{{ .Values.env.profile }}"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
 
             - name: DB_HOST
               value: {{ .Values.env.database.host }}
@@ -52,3 +48,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secrets.db.name }}
                   key: {{ .Values.secrets.db.passwordKey }}
+          volumeMounts:
+            - name: batch-dir
+              mountPath: /app/batch
+
+      volumes:
+        - name: batch-dir
+          hostPath:
+            path: {{ .Values.batch.outputHostPath }}
+            type: DirectoryOrCreate

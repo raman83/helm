@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-user
+  name: settlement-service
 spec:
   selector:
-    app: auth-user
+    app: ach-adapter-service
   ports:
-    - name: http
+    - protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
   type: {{ .Values.service.type }}
