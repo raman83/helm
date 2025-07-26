@@ -3,6 +3,8 @@ replicaCount: 1
 image:
   repository: raman83/consent-service
   tag: latest
+  pullPolicy: Always
+
 
 env:
   profile: prod
@@ -25,3 +27,7 @@ secrets:
     passwordKey: db-password
     usernameValue: postgres
     passwordValue: postgres
+
+istio:
+  enabled: true
+
